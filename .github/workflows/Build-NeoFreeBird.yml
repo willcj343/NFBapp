@@ -48,10 +48,10 @@ jobs:
           ref: ${{ inputs.repo_commit || github.ref }}
           submodules: recursive
 
-      - name: Checkout tweak repo (NeoFreeBird/tweak)
+      - name: Checkout tweak repo (willcj343/NFBtweak)
         uses: actions/checkout@v4
         with:
-          repository: NeoFreeBird/tweak
+          repository: willcj343/NFBtweak
           path: tweak
           ref: ${{ inputs.tweak_commit || 'refs/heads/master' }}
           submodules: recursive
