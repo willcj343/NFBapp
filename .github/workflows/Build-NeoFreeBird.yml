@@ -116,22 +116,23 @@ jobs:
           # Apply patches to the extracted Twitter.app
           PATCH_SRC="main/assets/main"
           if [ -d "${PATCH_SRC}" ]; then
-          rsync -av "${PATCH_SRC}/" main/tmp/Payload/Twitter.app/
+            rsync -av "${PATCH_SRC}/" main/tmp/Payload/Twitter.app/
           fi
-    
-          # Find the .deb file in main/packages
-          DEB_FILE=$(find main/packages -name "*.deb" -type f | head -n1)
+          
+          # Find the .deb file in main/packages and strip the 'main/' prefix
+          DEB_FILE=$(find main/packages -name "*.deb" -type f | head -n1 | sed 's|^main/||')
           if [ -z "$DEB_FILE" ]; then
-          echo "❌ No .deb file found in main/packages"
-          exit 1
+            echo "❌ No .deb file found in main/packages"
+            exit 1
           fi
-    
+          
           # Use cyan to inject the tweak
           cd main/tmp
           zip -qr ../packages/temp.ipa Payload
           cd ..
+          
           cyan -i packages/temp.ipa -f "$DEB_FILE" -o packages/NeoFreeBird_${{ github.run_id }}_${{ env.X_VERSION }}.ipa
-    
+          
           # Create .tipa copy
           cp packages/NeoFreeBird_${{ github.run_id }}_${{ env.X_VERSION }}.ipa packages/NeoFreeBird_${{ github.run_id }}_${{ env.X_VERSION }}.tipa
 
